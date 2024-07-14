@@ -129,3 +129,10 @@ def delete_one_recipe(recipe_id: int, db: Session = Depends(get_db)):
 @app.post("/resources/", response_model=schemas.Resource, tags=["Resources"])
 def create_resource(resource: schemas.ResourceCreate, db: Session = Depends(get_db)):
     return resources.create(db=db, resource=resource)
+
+
+@app.get("/resources/", response_model=list[schemas.Resource], tags=["Resources"])
+def read_resource(db: Session = Depends(get_db)):
+    return resources.read_all(db)
+
+
