@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from fastapi.middleware.cors import CORSMiddleware
 
 from .models import models, schemas
-from .controllers import orders, sandwiches, recipes, resources
+from .controllers import orders, sandwiches, recipes, resources, order_details
 from .dependencies.database import engine, get_db
 
 models.Base.metadata.create_all(bind=engine)
@@ -159,4 +159,9 @@ def delete_one_resource(resource_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="User not found")
     return resources.delete(db=db, resource_id=resource_id)
 
+
+# order_details
+@app.post("/order_details/", response_model=schemas.OrderDetail, tags=["OrderDetails"])
+def create_order_details(order_detail: schemas.OrderDetailCreate, db: Session = Depends(get_db)):
+    return order_details.create(db=db, order_detail=order_detail)
 
