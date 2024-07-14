@@ -59,3 +59,11 @@ def delete_one_order(order_id: int, db: Session = Depends(get_db)):
 @app.post("/sandwiches/", response_model=schemas.Sandwich, tags=["Sandwiches"])
 def create_sandwich(sandwich: schemas.SandwichCreate, db: Session = Depends(get_db)):
     return sandwiches.create(db=db, sandwich=sandwich)
+
+
+@app.put("/sandwiches/{sandwich_id}", response_model=schemas.Sandwich, tags=["Sandwiches"])
+def update_one_sandwich(sandwich_id: int, sandwich: schemas.SandwichUpdate, db: Session = Depends(get_db)):
+    sandwich_db = sandwiches.read_one(db, id=sandwich_id)
+    if sandwich_db is None:
+        raise HTTPException(status_code=404, detail="Sandwich not found")
+    return sandwiches.update(db=db, id=sandwich_id, sandwich=sandwich)
