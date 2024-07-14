@@ -95,3 +95,8 @@ def read_all_sandwiches(db: Session = Depends(get_db)):
 def create_recipe(recipe: schemas.RecipeCreate, db: Session = Depends(get_db)):
     return recipes.create(db=db, recipe=recipe)
 
+
+@app.get("/recipes/", response_model=list[schemas.Recipe], tags=["Recipes"])
+def read_recipes(db: Session = Depends(get_db)):
+    return recipes.read_all(db)
+
