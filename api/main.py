@@ -144,3 +144,9 @@ def read_one_resource(resource_id: int, db: Session = Depends(get_db)):
     return resource
 
 
+@app.put("/resources/{resource_id}", response_model=schemas.Resource, tags=["Resources"])
+def update_one_resource(resource_id: int, resource: schemas.ResourceUpdate, db: Session = Depends(get_db)):
+    resource_db = resources.read_one(db, resource_id=resource_id)
+    if resource_db is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    return resources.update(db=db, resource=resource, resource_id=resource_id)
