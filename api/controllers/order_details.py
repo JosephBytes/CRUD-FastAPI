@@ -28,3 +28,17 @@ def read_one(db: Session, order_id):
     return db.query(models.OrderDetail).filter(models.OrderDetail.id == order_id).first()
 
 
+def update(db: Session, order_id, order_detail):
+    # Query the database for the specific order_detail to update
+    db_order_details = db.query(models.OrderDetail).filter(models.OrderDetail.id == order_id)
+    # Extract the update data from the provided 'order' object
+    update_data = order_detail.model_dump(exclude_unset=True)
+    # Update the database record with the new data, without synchronizing the session
+    db_order_details.update(update_data, synchronize_session=False)
+    # Commit the changes to the database
+    db.commit()
+    # Return the updated order record
+    return db_order_details.first()
+
+
+
