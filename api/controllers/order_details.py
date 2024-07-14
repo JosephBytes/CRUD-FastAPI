@@ -24,3 +24,7 @@ def read_all(db: Session):
     return db.query(models.OrderDetail).all()
 
 
+def read_one(db: Session, order_id):
+    return db.query(models.OrderDetail).filter(models.OrderDetail.id == order_id).first()
+
+
