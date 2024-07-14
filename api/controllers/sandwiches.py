@@ -53,3 +53,10 @@ def delete(db: Session, id: int) -> Response:
 
 def read_all(db: Session) -> list[models.Sandwich]:
     return db.query(models.Sandwich).all()
+
+
+def read_one(db: Session, id: int) -> models.Sandwich:
+    sandwich = db.query(models.Sandwich).filter(models.Sandwich.id == id).first()
+    if sandwich is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Sandwich not found")
+    return sandwich
