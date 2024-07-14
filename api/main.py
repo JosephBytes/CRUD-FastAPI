@@ -75,3 +75,11 @@ def delete_one_sandwich(sandwich_id: int, db: Session = Depends(get_db)):
     if sandwich is None:
         raise HTTPException(status_code=404, detail="Sandwich not found")
     return sandwiches.delete(db=db, id=sandwich_id)
+
+
+@app.get("/sandwiches/{sandwich_id}", response_model=schemas.Sandwich, tags=["Sandwiches"])
+def read_one_sandwich(sandwich_id: int, db: Session = Depends(get_db)):
+    sandwich = sandwiches.read_one(db, id=sandwich_id)
+    if sandwich is None:
+        raise HTTPException(status_code=404, detail="Sandwich not found")
+    return sandwich
