@@ -41,4 +41,14 @@ def update(db: Session, order_id, order_detail):
     return db_order_details.first()
 
 
+def delete(db: Session, order_id):
+    # Query the database for the specific order_detail to delete
+    db_order_details = db.query(models.OrderDetail).filter(models.OrderDetail.id == order_id)
+    # Delete the database record without synchronizing the session
+    db_order_details.delete(synchronize_session=False)
+    # Commit the changes to the database
+    db.commit()
+    # Return a response with a status code indicating success (204 No Content)
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
+
 
