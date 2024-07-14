@@ -136,3 +136,11 @@ def read_resource(db: Session = Depends(get_db)):
     return resources.read_all(db)
 
 
+@app.get("/resources/{resource_id}", response_model=schemas.Resource, tags=["Resources"])
+def read_one_resource(resource_id: int, db: Session = Depends(get_db)):
+    resource = resources.read_one(db, resource_id=resource_id)
+    if resource is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    return resource
+
+
