@@ -39,3 +39,13 @@ def update(db: Session, recipe_id, recipe):
     # Return the updated order record
     return db_recipe.first()
 
+
+def delete(db: Session, recipe_id):
+    # Query the database for the specific recipe to delete
+    db_recipe = db.query(models.Recipe).filter(models.Recipe.id == recipe_id)
+    # Delete the database record without synchronizing the session
+    db_recipe.delete(synchronize_session=False)
+    # Commit the changes to the database
+    db.commit()
+    # Return a response with a status code indicating success (204 No Content)
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
