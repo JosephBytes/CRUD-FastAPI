@@ -83,3 +83,8 @@ def read_one_sandwich(sandwich_id: int, db: Session = Depends(get_db)):
     if sandwich is None:
         raise HTTPException(status_code=404, detail="Sandwich not found")
     return sandwich
+
+
+@app.get("/sandwiches/", response_model=list[schemas.Sandwich], tags=["Sandwiches"])
+def read_all_sandwiches(db: Session = Depends(get_db)):
+    return sandwiches.read_all(db)
