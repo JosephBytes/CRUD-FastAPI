@@ -66,7 +66,7 @@ def update_one_sandwich(sandwich_id: int, sandwich: schemas.SandwichUpdate, db: 
     sandwich_db = sandwiches.read_one(db, id=sandwich_id)
     if sandwich_db is None:
         raise HTTPException(status_code=404, detail="Sandwich not found")
-    return sandwiches.update(db=db, id=sandwich_id, sandwich=sandwich)
+    return sandwiches.update(db=db, sandwich_id=sandwich_id, sandwich=sandwich)
 
 
 @app.delete("/sandwiches/{sandwich_id}", tags=["Sandwiches"])
@@ -107,3 +107,13 @@ def read_one_recipe(recipe_id: int, db: Session = Depends(get_db)):
     if recipe is None:
         raise HTTPException(status_code=404, detail="User not found")
     return recipe
+
+
+@app.put("/recipes/{recipe_id}", response_model=schemas.Recipe, tags=["Recipes"])
+def update_one_recipe(recipe_id: int, recipe: schemas.RecipeUpdate, db: Session = Depends(get_db)):
+    recipe_db = recipes.read_one(db, recipe_id=recipe_id)
+    if recipe_db is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    return recipes.update(db=db, recipe_id=recipe_id, recipe=recipe)
+
+
