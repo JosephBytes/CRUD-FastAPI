@@ -27,3 +27,15 @@ def read_all(db: Session):
 def read_one(db: Session, recipe_id):
     return db.query(models.Recipe).filter(models.Recipe.id == recipe_id).first()
 
+def update(db: Session, recipe_id, recipe):
+    # Query the database for the specific order to update
+    db_recipe = db.query(models.Recipe).filter(models.Recipe.id == recipe_id)
+    # Extract the update data from the provided 'recipe' object
+    update_data = recipe.model_dump(exclude_unset=True)
+    # Update the database record with the new data, without synchronizing the session
+    db_recipe.update(update_data, synchronize_session=False)
+    # Commit the changes to the database
+    db.commit()
+    # Return the updated order record
+    return db_recipe.first()
+
