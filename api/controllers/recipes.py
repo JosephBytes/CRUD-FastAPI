@@ -23,3 +23,7 @@ def create(db: Session, recipe):
 def read_all(db: Session):
     return db.query(models.Recipe).all()
 
+
+def read_one(db: Session, recipe_id):
+    return db.query(models.Recipe).filter(models.Recipe.id == recipe_id).first()
+
