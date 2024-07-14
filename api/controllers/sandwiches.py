@@ -49,3 +49,7 @@ def delete(db: Session, id: int) -> Response:
     db.commit()
     # Return a response with a status code indicating success (204 No Content)
     return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+def read_all(db: Session) -> list[models.Sandwich]:
+    return db.query(models.Sandwich).all()
