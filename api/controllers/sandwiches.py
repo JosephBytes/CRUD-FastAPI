@@ -19,45 +19,35 @@ def create(db: Session, sandwich):
     return db_sandwich
 
 
-def update(db: Session, id: int, sandwich: schemas.SandwichUpdate) -> models.Sandwich:
+def update(db: Session, sandwich_id, sandwich):
     # Query the database for the specific sandwich to update
-    db_sandwich = db.query(models.Sandwich).filter(models.Sandwich.id == id).first()
-    if db_sandwich is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Sandwich not found")
-
+    db_sandwich = db.query(models.Sandwich).filter(models.Sandwich.id == sandwich_id)
     # Extract the update data from the provided 'sandwich' object
     update_data = sandwich.model_dump(exclude_unset=True)
     # Update the database record with the new data, without synchronizing the session
-    for key, value in update_data.items():
-        setattr(db_sandwich, key, value)
-
+    db_sandwich.update(update_data, synchronize_session=False)
     # Commit the changes to the database
     db.commit()
     # Return the updated sandwich record
-    return db_sandwich
+    return db_sandwich.first()
 
 
-def delete(db: Session, id: int) -> Response:
+def delete(db: Session, sandwich_id):
     # Query the database for the specific sandwich to delete
-    db_sandwich = db.query(models.Sandwich).filter(models.Sandwich.id == id).first()
-    if db_sandwich is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Sandwich not found")
-
-    # Delete the database record
-    db.delete(db_sandwich)
+    db_sandwich = db.query(models.Sandwich).filter(models.Sandwich.id == sandwich_id)
+    # Delete the database record without synchronizing the session
+    db_sandwich.delete(synchronize_session=False)
     # Commit the changes to the database
     db.commit()
     # Return a response with a status code indicating success (204 No Content)
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
-def read_all(db: Session) -> list[models.Sandwich]:
+def read_all(db: Session):
     return db.query(models.Sandwich).all()
 
 
-def read_one(db: Session, id: int) -> models.Sandwich:
-    sandwich = db.query(models.Sandwich).filter(models.Sandwich.id == id).first()
-    if sandwich is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Sandwich not found")
-    return sandwich
+def read_one(db: Session, sandwich_id):
+    return db.query(models.Sandwich).filter(models.Sandwich.id == sandwich_id).first()
+
 

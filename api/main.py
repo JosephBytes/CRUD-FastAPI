@@ -63,7 +63,7 @@ def create_sandwich(sandwich: schemas.SandwichCreate, db: Session = Depends(get_
 
 @app.put("/sandwiches/{sandwich_id}", response_model=schemas.Sandwich, tags=["Sandwiches"])
 def update_one_sandwich(sandwich_id: int, sandwich: schemas.SandwichUpdate, db: Session = Depends(get_db)):
-    sandwich_db = sandwiches.read_one(db, id=sandwich_id)
+    sandwich_db = sandwiches.read_one(db, sandwich_id=sandwich_id)
     if sandwich_db is None:
         raise HTTPException(status_code=404, detail="Sandwich not found")
     return sandwiches.update(db=db, sandwich_id=sandwich_id, sandwich=sandwich)
@@ -71,15 +71,15 @@ def update_one_sandwich(sandwich_id: int, sandwich: schemas.SandwichUpdate, db: 
 
 @app.delete("/sandwiches/{sandwich_id}", tags=["Sandwiches"])
 def delete_one_sandwich(sandwich_id: int, db: Session = Depends(get_db)):
-    sandwich = sandwiches.read_one(db, id=sandwich_id)
+    sandwich = sandwiches.read_one(db, sandwich_id=sandwich_id)
     if sandwich is None:
         raise HTTPException(status_code=404, detail="Sandwich not found")
-    return sandwiches.delete(db=db, id=sandwich_id)
+    return sandwiches.delete(db=db, sandwich_id=sandwich_id)
 
 
 @app.get("/sandwiches/{sandwich_id}", response_model=schemas.Sandwich, tags=["Sandwiches"])
 def read_one_sandwich(sandwich_id: int, db: Session = Depends(get_db)):
-    sandwich = sandwiches.read_one(db, id=sandwich_id)
+    sandwich = sandwiches.read_one(db, sandwich_id=sandwich_id)
     if sandwich is None:
         raise HTTPException(status_code=404, detail="Sandwich not found")
     return sandwich
