@@ -117,3 +117,10 @@ def update_one_recipe(recipe_id: int, recipe: schemas.RecipeUpdate, db: Session 
     return recipes.update(db=db, recipe_id=recipe_id, recipe=recipe)
 
 
+@app.delete("/recipes/{recipe_id}", tags=["Recipes"])
+def delete_one_recipe(recipe_id: int, db: Session = Depends(get_db)):
+    recipe = recipes.read_one(db, recipe_id=recipe_id)
+    if recipe is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    return recipes.delete(db=db, recipe_id=recipe_id)
+
