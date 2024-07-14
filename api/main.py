@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from fastapi.middleware.cors import CORSMiddleware
 
 from .models import models, schemas
-from .controllers import orders, sandwiches
+from .controllers import orders, sandwiches, recipes
 from .dependencies.database import engine, get_db
 
 models.Base.metadata.create_all(bind=engine)
@@ -88,3 +88,10 @@ def read_one_sandwich(sandwich_id: int, db: Session = Depends(get_db)):
 @app.get("/sandwiches/", response_model=list[schemas.Sandwich], tags=["Sandwiches"])
 def read_all_sandwiches(db: Session = Depends(get_db)):
     return sandwiches.read_all(db)
+
+
+# Recipes
+@app.post("/recipes/", response_model=schemas.Recipe, tags=["Recipes"])
+def create_recipe(recipe: schemas.RecipeCreate, db: Session = Depends(get_db)):
+    return recipes.create(db=db, recipe=recipe)
+
