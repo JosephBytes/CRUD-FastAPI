@@ -40,3 +40,12 @@ def update(db: Session, resource_id, resource):
     return db_resource.first()
 
 
+def delete(db: Session, resource_id):
+    # Query the database for the specific resource to delete
+    db_resource = db.query(models.Resource).filter(models.Resource.id == resource_id)
+    # Delete the database record without synchronizing the session
+    db_resource.delete(synchronize_session=False)
+    # Commit the changes to the database
+    db.commit()
+    # Return a response with a status code indicating success (204 No Content)
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
