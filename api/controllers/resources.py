@@ -19,3 +19,7 @@ def create(db: Session, resource):
     return db_resource
 
 
+def read_all(db: Session):
+    return db.query(models.Resource).all()
+
+
