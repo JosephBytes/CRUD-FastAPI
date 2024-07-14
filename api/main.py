@@ -171,3 +171,11 @@ def read_order_details(db: Session = Depends(get_db)):
     return order_details.read_all(db)
 
 
+@app.get("/order_details/{order_id}", response_model=schemas.OrderDetail, tags=["OrderDetails"])
+def read_one_order_details(order_id: int, db: Session = Depends(get_db)):
+    order = order_details.read_one(db, order_id=order_id)
+    if order is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    return order
+
+
