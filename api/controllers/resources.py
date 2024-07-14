@@ -27,3 +27,16 @@ def read_one(db: Session, resource_id):
     return db.query(models.Resource).filter(models.Resource.id == resource_id).first()
 
 
+def update(db: Session, resource_id, resource):
+    # Query the database for the specific resource to update
+    db_resource = db.query(models.Resource).filter(models.Order.id == resource_id)
+    # Extract the update data from the provided 'resource' object
+    update_data = resource.model_dump(exclude_unset=True)
+    # Update the database record with the new data, without synchronizing the session
+    db_resource.update(update_data, synchronize_session=False)
+    # Commit the changes to the database
+    db.commit()
+    # Return the updated order record
+    return db_resource.first()
+
+
