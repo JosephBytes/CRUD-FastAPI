@@ -19,3 +19,8 @@ def create(db: Session, order_detail):
     # Return the newly created Order object
     return db_order_details
 
+
+def read_all(db: Session):
+    return db.query(models.OrderDetail).all()
+
+
