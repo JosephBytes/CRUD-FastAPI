@@ -67,3 +67,11 @@ def update_one_sandwich(sandwich_id: int, sandwich: schemas.SandwichUpdate, db: 
     if sandwich_db is None:
         raise HTTPException(status_code=404, detail="Sandwich not found")
     return sandwiches.update(db=db, id=sandwich_id, sandwich=sandwich)
+
+
+@app.delete("/sandwiches/{sandwich_id}", tags=["Sandwiches"])
+def delete_one_sandwich(sandwich_id: int, db: Session = Depends(get_db)):
+    sandwich = sandwiches.read_one(db, id=sandwich_id)
+    if sandwich is None:
+        raise HTTPException(status_code=404, detail="Sandwich not found")
+    return sandwiches.delete(db=db, id=sandwich_id)
