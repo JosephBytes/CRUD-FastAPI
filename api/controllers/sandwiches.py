@@ -3,10 +3,10 @@ from fastapi import HTTPException, status, Response
 from ..models import models, schemas
 
 
-def create(db: Session, sandwich: schemas.SandwichCreate) -> models.Sandwich:
+def create(db: Session, sandwich):
     # Create a new instance of the Sandwich model with the provided data
     db_sandwich = models.Sandwich(
-        item=sandwich.sandwich_name,
+        sandwich_name=sandwich.sandwich_name,
         price=sandwich.price
     )
     # Add the newly created Sandwich object to the database session
@@ -60,3 +60,4 @@ def read_one(db: Session, id: int) -> models.Sandwich:
     if sandwich is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Sandwich not found")
     return sandwich
+
