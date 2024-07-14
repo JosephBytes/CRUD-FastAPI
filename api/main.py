@@ -165,3 +165,9 @@ def delete_one_resource(resource_id: int, db: Session = Depends(get_db)):
 def create_order_details(order_detail: schemas.OrderDetailCreate, db: Session = Depends(get_db)):
     return order_details.create(db=db, order_detail=order_detail)
 
+
+@app.get("/order_details/", response_model=list[schemas.OrderDetail], tags=["OrderDetails"])
+def read_order_details(db: Session = Depends(get_db)):
+    return order_details.read_all(db)
+
+
