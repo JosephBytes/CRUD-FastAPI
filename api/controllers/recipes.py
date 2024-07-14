@@ -19,3 +19,7 @@ def create(db: Session, recipe):
     # Return the newly created Order object
     return db_recipe
 
+
+def read_all(db: Session):
+    return db.query(models.Recipe).all()
+
