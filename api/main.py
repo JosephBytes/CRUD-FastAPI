@@ -179,3 +179,9 @@ def read_one_order_details(order_id: int, db: Session = Depends(get_db)):
     return order
 
 
+@app.delete("/order_details/{order_id}", tags=["OrderDetails"])
+def delete_one_order_details(order_id: int, db: Session = Depends(get_db)):
+    order = order_details.read_one(db, order_id=order_id)
+    if order is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    return orders.delete(db=db, order_id=order_id)
