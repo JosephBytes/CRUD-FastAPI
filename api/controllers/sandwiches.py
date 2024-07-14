@@ -35,3 +35,17 @@ def update(db: Session, id: int, sandwich: schemas.SandwichUpdate) -> models.San
     db.commit()
     # Return the updated sandwich record
     return db_sandwich
+
+
+def delete(db: Session, id: int) -> Response:
+    # Query the database for the specific sandwich to delete
+    db_sandwich = db.query(models.Sandwich).filter(models.Sandwich.id == id).first()
+    if db_sandwich is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Sandwich not found")
+
+    # Delete the database record
+    db.delete(db_sandwich)
+    # Commit the changes to the database
+    db.commit()
+    # Return a response with a status code indicating success (204 No Content)
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
